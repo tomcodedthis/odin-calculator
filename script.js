@@ -7,17 +7,14 @@ const resultText = document.getElementById('result-text');
 let resultArray = [];
 let resultA = 0;
 let resultB = 0;
+let operator = '';
+let opOn = false;
 
-let addOn = false;
-let subtractOn = false;
-let multiplyOn = false;
-let divideOn = false;
+// Keyboard input
 
-// Keyboard shortcut inputs
+window.onkeydown = keyPress;
 
-window.onkeydown = keyInput;
-
-function keyInput(e) {
+function keyPress(e) {
 
     if (e.code === 'Space') {       // Avoids NaN error
         
@@ -44,9 +41,9 @@ function keyInput(e) {
 
 // Number input
 
-numberBtns.forEach(btn => btn.addEventListener('click', enterNumber));
+numberBtns.forEach(btn => btn.addEventListener('click', numberInput));
 
-function enterNumber(e) {
+function numberInput(e) {
 
     let number = e.target.innerText;
 
@@ -57,6 +54,7 @@ function enterNumber(e) {
 
     resultText.innerText = resultA;
     resultText.style.animationName = 'none';
+
 }
 
 // Operator input
@@ -64,85 +62,102 @@ function enterNumber(e) {
 operatorBtns.forEach(btn => btn.addEventListener('click', runFunction));
 
 function runFunction(e) {
-    
+
     target = e.target.id;
 
     highlightBtn(e);
 
+    if (resultB == 0 || resultB == 'infinity') {        // Avoids small bugs
+
+        resultB = resultA;
+
+    }
+
     if (target == 'Backspace') {       // Resets the calc
 
-        turnOffVar();
         resultB = 0;
+        opOn = false;
 
         resultText.innerText = '|';
         resultText.style.animationName = 'resultsBlink';
 
-    } else if (target == '+' || target == 'Enter' && addOn) {      // Add
+    } else if (target == 'Enter') {     // Returns the formula
 
-        turnOffVar();
-        addOn = true;
+        if (operator == '+') {
 
-        resultB += resultA;
-        resultText.innerText = resultB;
+            resultB = add(resultA, resultB);
 
-    } else if (target == '-' || target == 'Enter' && subtractOn) {        // Subtract
+        } else if (operator == '-') {
 
-        turnOffVar();
-        subtractOn = true;
+            resultB = subtract(resultA, resultB);
 
-        if (resultB == 0) {     // Stops minus numbers
+        } else if (operator == '*') {
 
-            resultB = resultA;
-            resultText.innerText = resultA;
+            resultB = multiply(resultA, resultB);
+            
+        } else if (operator == '/') {
 
-        } else {
+            resultB = divide(resultA, resultB);
 
-            resultB -= resultA;
-            resultText.innerText = resultB;
+            if (resultA == 0) {
 
-        }
-
-    } else if (target == '*' || target == 'Enter' && multiplyOn) {        // Multiply
-
-        turnOffVar();
-        multiplyOn = true;
-
-        if (resultB == 0) {
-
-            resultB = resultA;
-            resultText.innerText = resultA;
-
-        } else if (resultA == 0) {
-
-            resultText.innerText = resultB;            
+                resultB = 'infinity';
+            
+            }
 
         } else {
 
-            resultB *= resultA;
-            resultText.innerText = resultB;
-
-        }
-
-    } else if (target == '/' || target == 'Enter' && divideOn) {        // Divide
-
-        turnOffVar();
-        divideOn = true;
+            return
         
-        if (resultB == 0) {
-
-            resultB = resultA;
-            resultText.innerText = resultA;
-
-        } else if (resultA == 0) {
-
-            resultText.innerText = resultB;            
-
-        } else {
-
-            resultB /= resultA;
-            resultText.innerText = resultB;
-
         }
+
+        resultText.innerText = resultB;
+        operator = '';
+        opOn = false;
+
+    } else if (target == '+') {      // Add
+
+        if (opOn) {       // Runs previous function first
+
+            document.getElementById(`Enter`).click();
+    
+        }
+
+        operator = '+';
+        opOn = true;
+
+    } else if (target == '-') {        // Subtract
+
+        if (opOn) {       // Runs previous function first
+
+            document.getElementById(`Enter`).click();
+    
+        }
+
+        operator = '-';
+        opOn = true;
+
+    } else if (target == '*') {        // Multiply
+
+        if (opOn) {       // Runs previous function first
+
+            document.getElementById(`Enter`).click();
+    
+        }
+
+        operator = '*';
+        opOn = true;
+
+    } else if (target == '/') {        // Divide
+
+        if (opOn) {       // Runs previous function first
+
+            document.getElementById(`Enter`).click();
+    
+        }
+
+        operator = '/';
+        opOn = true;
 
     } else {
 
@@ -160,16 +175,72 @@ function runFunction(e) {
 
     resultA = 0;
     resultArray = [];
+
 }
 
-// Global functions
+// Math functions
 
-function turnOffVar() {
+function add(resultA, resultB) {
 
-    addOn = false;
-    subtractOn = false;
-    multiplyOn = false;
-    divideOn = false;
+    resultB += resultA;
+
+    return resultB
+
+}
+
+function subtract(resultA, resultB) {
+
+    if (resultB == 0) {     // Stops minus numbers
+
+        resultB = resultA;
+
+    } else {
+
+        resultB -= resultA;
+
+    }
+
+    return resultB
+
+}
+
+function multiply(resultA, resultB) {
+
+    if (resultB == 0) {
+
+        resultB = resultA;
+
+    } else if (resultA == 0) {
+
+        resultB = 0;
+
+    } else {
+
+        resultB *= resultA;
+
+    }
+
+    return resultB
+
+}
+
+function divide(resultA, resultB) {
+
+    if (resultB == 0) {
+
+        resultB = resultA;
+
+    } else if (resultA == 0) {
+
+        resultB = 0;       
+
+    } else {
+
+        resultB /= resultA;
+
+    }
+
+    return resultB
 
 }
 
@@ -179,9 +250,9 @@ function highlightBtn(e) {
 
     e.target.style.backgroundColor = 'var(--black)';
 
-    setTimeout(() => {
+    setTimeout(() => {      // Resets to original stlye
 
-        e.target.style.backgroundColor = 'var(--dark-grey)';
+        e.target.style.backgroundColor = '';
     
     }, 200);
 
