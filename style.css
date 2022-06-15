@@ -94,6 +94,11 @@ main {
     font-size: 64px;
 }
 
+.decimal {
+    background-color: var(--dark-grey);
+    font-size: 64px;
+}
+
 .backspace {
     grid-column: span 2;
     background-color: var(--red);

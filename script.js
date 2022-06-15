@@ -28,9 +28,13 @@ function keyPress(e) {
         document.getElementById(`${e.key}`).click();
 
     } else if (e.key == 'Enter' || e.key == 'Backspace' || e.key == '+' 
-        || e.key == '-' || e.key == '*' || e.key ==  '/') {     // Press's operator button on operator keydown
+        || e.key == '-' || e.key == '*' || e.key ==  '/' || e.key == '.') {     // Press's operator button on operator keydown
 
         document.getElementById(`${e.key}`).click();
+
+    } else if (e.key == 'Clear') {
+
+        document.getElementById(`Backspace`).click();
 
     } else {
 
@@ -49,11 +53,20 @@ function numberInput(e) {
 
     highlightBtn(e);
 
-    resultArray.push(number);
-    resultA = parseInt(resultArray.join(''));
+    if (resultA.toString().length == 12 || number == '.' && resultText.innerText == '|' 
+        || number == '.' && resultText.innerText == '') {
 
-    resultText.innerText = resultA;
-    resultText.style.animationName = 'none';
+        return
+
+    } else {
+
+        resultArray.push(number);
+        resultA = parseFloat(resultArray.join(''));
+    
+        resultText.innerText = resultA;
+        resultText.style.animationName = 'none';
+
+    }
 
 }
 
@@ -111,13 +124,22 @@ function runFunction(e) {
         
         }
 
-        resultText.innerText = resultB;
+        if (resultB.toString().length >= 12) {
+
+            resultText.innerText = 'Brain too small.';
+
+        } else {
+
+            resultText.innerText = resultB;
+
+        }
+
         operator = '';
         opOn = false;
 
     } else if (target == '+') {      // Add
 
-        if (opOn) {       // Runs previous function first
+        if (opOn && resultA > 0) {       // Runs previous function first
 
             document.getElementById(`Enter`).click();
     
@@ -128,7 +150,7 @@ function runFunction(e) {
 
     } else if (target == '-') {        // Subtract
 
-        if (opOn) {       // Runs previous function first
+        if (opOn && resultA > 0) {       // Runs previous function first
 
             document.getElementById(`Enter`).click();
     
@@ -139,7 +161,7 @@ function runFunction(e) {
 
     } else if (target == '*') {        // Multiply
 
-        if (opOn) {       // Runs previous function first
+        if (opOn && resultA > 0) {       // Runs previous function first
 
             document.getElementById(`Enter`).click();
     
@@ -150,7 +172,7 @@ function runFunction(e) {
 
     } else if (target == '/') {        // Divide
 
-        if (opOn) {       // Runs previous function first
+        if (opOn && resultA > 0) {       // Runs previous function first
 
             document.getElementById(`Enter`).click();
     
@@ -248,7 +270,7 @@ function divide(resultA, resultB) {
 
 function highlightBtn(e) {
 
-    e.target.style.backgroundColor = 'var(--black)';
+    e.target.style.backgroundColor = 'var(--near-black)';
 
     setTimeout(() => {      // Resets to original stlye
 
