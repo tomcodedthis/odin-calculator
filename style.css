@@ -1,13 +1,18 @@
 :root {
-    --black: #222;
+    --black: #101010;
+    --near-black: #303030;
     --white: #eee;
-    --dark-grey: #333;
+    --dark-grey: #46433e;
+    --light-grey: #847f79;
+    --blue: #293454;
+    --green-blue: #585953;
+    --red: #fd660d;
 }
 
 body {
     background-color: var(--black);
     color: var(--white);
-    font-family: Geneva, Verdana, sans-serif;
+    font-family: 'Play', Verdana, sans-serif;
     margin: 20px;
     display: flex;
     justify-content: center;
@@ -15,19 +20,27 @@ body {
 
 main {
     display: grid;
-    grid-template-rows: 30% 70%;
+    grid-template-rows: 25% 75%;
     flex-direction: column;
     margin-top: 15vh;
-    width: 600px;
+    width: 625px;
     height: 600px;
+    border: 30px solid var(--blue);
+    border-radius: 3%;
+    background-color: var(--blue);
 }
 
 .main-cont {
+    border: 10px solid var(--blue);
+}
+
+#result-cont {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 5px solid var(--white);
-    background-color: var(--dark-grey);
+    background-color: var(--green-blue);
+    border-bottom: 30px solid var(--blue);
+    padding: 20px;
 }
 
 @keyframes resultsBlink {
@@ -47,13 +60,16 @@ main {
     animation-duration: 0.8s;
     animation-iteration-count: infinite;
     width: 100%;
-    text-align: center;
+    text-align: right;
+    color: var(--black);
 }
 
 #btns-cont {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+    background-color: var(--blue);
 }
 
 .btn {
@@ -61,22 +77,33 @@ main {
     justify-content: center;
     align-items: center;
     height: 100%;
-    border: 2px solid var(--white);
-    background-color: var(--dark-grey);
+    border: 3px solid var(--blue);
+    border-radius: 10%;
+    background-color: var(--light-grey);
     color: var(--white);
     font-size: 54px;
     font-weight: 400;
 }
 
 .btn:hover {
-    background-color: var(--black);
+    background-color: var(--near-black);
+}
+
+.operator {
+    background-color: var(--dark-grey);
+    font-size: 64px;
+}
+
+.backspace {
+    grid-column: span 2;
+    background-color: var(--red);
 }
 
 #Enter {
-    grid-column: span 5;
+    grid-column: span 3;
 }
 
 h2 {
-    font-size: 64px;
+    font-size: 80px;
     font-weight: 400;
 }
